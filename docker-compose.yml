@@ -1,23 +1,25 @@
-version: '3'
+version: '3.9'
 
 services:
   zipkin:
     image: openzipkin/zipkin
     ports:
-    - 9411:9411
+      - 9411:9411
   mysql:
-    image: mysql
+    image: mysql:5.7
+    volumes:
+      - ./db_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
     ports:
       - 3306:3306
   keycloak:
-    image: jboss/keycloak
+    image: quay.io/keycloak/keycloak:latest
     environment:
-      KEYCLOAK_USER: root
-      KEYCLOAK_PASSWORD: root
-      DB_VENDOR: h2
+      DB_VENDOR: MYSQL
+      DB_ADDR: mysql
+      DB_DATABASE: wj_keycloak
+      DB_USER: root
+      DB_PASSWORD: root
     ports:
       - 8888:8080
-
-
